@@ -62,23 +62,23 @@ public class ParkingDataBaseIT {
       // cette méthode permet de réserver la place numéro 1 et ajouter un ticket en base de données pour une voiture immatriculé ABCDEF (voir mock ci-dessus)
         parkingService.processIncomingVehicle();
         
-      
+     // check saved ticket
+
+    	Ticket savedTicket = ticketDAO.getTicket("ABCDEF"); // permet de récupérer le ticket qu'on vient d'enregistrer
+
+    	assertNotNull(savedTicket); // le ticket récupéré ne doit pas être null
+
+    	// check parking table (on vient de résérver la place numéro 1 normalement la prochaine place dispo. est la 2
+
+    	int nextAvailabelSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
+
+    	assertEquals(nextAvailabelSlot, 2); // cela signifie que la table parking a bien été mise à jour
+
+    	// fin du test
+
+    	}
         	
-        	// check saved ticket
-
-        	Ticket savedTicket = ticketDAO.getTicket("ABCDEF"); // permet de récupérer le ticket qu'on vient d'enregistrer
-
-        	assertNotNull(savedTicket); // le ticket récupéré ne doit pas être null
-
-        	// check parking table (on vient de résérver la place numéro 1 normalement la prochaine place dispo. est la 2
-
-        	int nextAvailabelSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-
-        	assertEquals(nextAvailabelSlot, 2); // cela signifie que la table parking a bien été mise à jour
-
-        	// fin du test
-
-        	}
+        	
   
 
     @Test
@@ -87,12 +87,12 @@ public class ParkingDataBaseIT {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
-        
-   
-		boolean fareGenereted = ticketDAO.updateTicket(null);
+        boolean fareGenereted = ticketDAO.updateTicket(null);
         assertNotNull(fareGenereted);
         
        
     }
+   
+		
 
 }

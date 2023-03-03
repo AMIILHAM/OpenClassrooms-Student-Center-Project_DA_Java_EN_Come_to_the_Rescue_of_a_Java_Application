@@ -16,17 +16,19 @@ public class FareCalculatorService {
     public FareCalculatorService(TicketDAO ticketDAO) {
 		this.ticketDAO = ticketDAO;
 	}
+    
+
 
 	public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
-
+        // Calculer la durée de stationnement en milliseconde.
         double inHour = ticket.getInTime().getTime();
         double outHour = ticket.getOutTime().getTime();
 
-        //TODO:   code corrigé
         double durationMs = outHour - inHour;
+        // convertir la durée de stationnement en heure.
         double duration = durationMs/3600000;
        
         // Condition pour la gratuite de 30 min de stationnement
@@ -34,6 +36,7 @@ public class FareCalculatorService {
         if(duration<=0.5) { 
         	duration=0;
         }
+        // Si le véhicule est récurrent on applique une réduction de 5%. Sinon on applique le tarif normal.
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
@@ -56,6 +59,7 @@ public class FareCalculatorService {
         }
     }
 
+ // une méthode return true si le vehiculeRegNumber est récurrent. Sinon return false.
 	private boolean isReccurent(String vehiculeRegNumber) {
 		return ticketDAO.countOccurrenceVehiculeRegNumber(vehiculeRegNumber) >= 1;
 	}
