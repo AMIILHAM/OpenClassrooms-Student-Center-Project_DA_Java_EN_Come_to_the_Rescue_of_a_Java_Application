@@ -18,8 +18,13 @@ public class TicketDAO {
     private static final Logger logger = LogManager.getLogger("TicketDAO");
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    
+    
 
-    public boolean saveTicket(Ticket ticket){
+    public TicketDAO() {
+	}
+
+	public boolean saveTicket(Ticket ticket){
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -39,6 +44,32 @@ public class TicketDAO {
             return false;
         }
     }
+	
+	 public int countOccurrenceVehiculeRegNumber(String regVehicleNumber){
+	        Connection con = null;
+	        try {
+	        	int result = 0;
+	            con = dataBaseConfig.getConnection();
+	            
+	            PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET_BY_VEHICULE_REG_NUMBER);
+	            ps.setString(1, regVehicleNumber);
+	            ResultSet rs = ps.executeQuery();
+	            if(rs.next()){
+	                result = rs.getInt(1);
+	            }
+	            
+	            dataBaseConfig.closePreparedStatement(ps);
+	            System.out.print(" Nombre de doublon : ");
+	            System.out.println(result >= 1);
+	            return result;
+	            
+	        }catch (Exception ex){
+	            logger.error("",ex);
+	            return 0;
+	        }finally {
+	            dataBaseConfig.closeConnection(con);
+	        }
+	    }  
 
     public Ticket getTicket(String vehicleRegNumber) {
         Connection con = null;

@@ -7,7 +7,7 @@ public class Ticket {
     private int id;
     private ParkingSpot parkingSpot;
     private String vehicleRegNumber;
-    private double price;
+    private  double price;
     private Date inTime;
     private Date outTime;
 
@@ -35,7 +35,7 @@ public class Ticket {
         this.vehicleRegNumber = vehicleRegNumber;
     }
 
-    public double getPrice() {
+    public  double getPrice() {
         return price;
     }
 
