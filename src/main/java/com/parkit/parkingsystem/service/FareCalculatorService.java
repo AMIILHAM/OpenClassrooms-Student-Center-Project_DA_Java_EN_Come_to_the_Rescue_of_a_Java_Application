@@ -17,7 +17,20 @@ public class FareCalculatorService {
 		this.ticketDAO = ticketDAO;
 	}
     
-
+    /**
+   	 * Méthode pour calculer le tarif de parking.
+   	 * <p>
+   	 * Cette méthode sert à calculer les tarifs de deux types de véhicules(voiture et vélo); elle commence par calculer la durée passée dans le parking. 
+   	 * Elle traite 3 cas :
+   	 * 
+   	 * Si la durée de stationnement est inférieur ou égal 30min le tarif égal à 0.
+   	 * S'il s'agit d'un nouveau véhicule, elle calcule le tarif normal selon son type.
+   	 * Si le véhicule est récurrent càd le numero d'immatriculation est déjà enregistré dans la base de donnée, elle applique une réduction de 5% sur le tarif.
+   	 * <p>
+   	 * 
+   	 * @param ticket de Type Ticket.
+   	 * @return tarif de parking pour voiture ou vélo.
+   	 */
 
 	public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
