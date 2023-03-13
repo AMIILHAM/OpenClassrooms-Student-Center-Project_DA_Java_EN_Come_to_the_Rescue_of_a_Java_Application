@@ -72,7 +72,7 @@ public class FareCalculatorService {
         }
     }
 
- // une méthode return true si le vehiculeRegNumber est récurrent. Sinon return false.
+       // une méthode return true si le vehiculeRegNumber est récurrent. Sinon return false.
 	private boolean isReccurent(String vehiculeRegNumber) {
 		return ticketDAO.countOccurrenceVehiculeRegNumber(vehiculeRegNumber) >= 1;
 	}
