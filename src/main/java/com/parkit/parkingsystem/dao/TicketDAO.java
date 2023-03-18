@@ -54,18 +54,20 @@ public class TicketDAO {
 
 	public int countOccurrenceVehiculeRegNumber(String regVehicleNumber) {
 		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			int result = 0;
 			con = dataBaseConfig.getConnection();
 
-			PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET_BY_VEHICULE_REG_NUMBER);
+			 ps = con.prepareStatement(DBConstants.COUNT_TICKET_BY_VEHICULE_REG_NUMBER);
 			ps.setString(1, regVehicleNumber);
-			ResultSet rs = ps.executeQuery();
+			 rs = ps.executeQuery();
 			if (rs.next()) {
 				result = rs.getInt(1);
 			}
 
-			dataBaseConfig.closePreparedStatement(ps);
+			
 			System.out.print(" Nombre de doublon : ");
 			System.out.println(result >= 1);
 			return result;
@@ -75,18 +77,22 @@ public class TicketDAO {
 			return 0;
 		} finally {
 			dataBaseConfig.closeConnection(con);
+			dataBaseConfig.closePreparedStatement(ps);
+			dataBaseConfig.closeResultSet(rs);
 		}
 	}
 
 	public Ticket getTicket(String vehicleRegNumber) {
 		Connection con = null;
 		Ticket ticket = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
+			 ps = con.prepareStatement(DBConstants.GET_TICKET);
 			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			ps.setString(1, vehicleRegNumber);
-			ResultSet rs = ps.executeQuery();
+			 rs = ps.executeQuery();
 			if (rs.next()) {
 				ticket = new Ticket();
 				ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)), false);
@@ -96,17 +102,19 @@ public class TicketDAO {
 				ticket.setPrice(rs.getDouble(3));
 				ticket.setInTime(rs.getTimestamp(4));
 				ticket.setOutTime(rs.getTimestamp(5));
-				dataBaseConfig.closeResultSet(rs);
-				dataBaseConfig.closePreparedStatement(ps);
+				
 			}
 			
-	
+		
 			return ticket;
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 			return null;
 		} finally {
 			dataBaseConfig.closeConnection(con);
+			dataBaseConfig.closePreparedStatement(ps);
+			dataBaseConfig.closeResultSet(rs);
+			
 		}
 	}
 
